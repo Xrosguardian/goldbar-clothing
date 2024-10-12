@@ -1,6 +1,6 @@
 .category-container { 
     min-width: 30%; 
-    height: 240px; 
+    height: 46vh; 
     flex: 1 1 auto; 
     display: flex; 
     align-items: center; 
@@ -34,7 +34,7 @@
             background-position: center; 
         } 
         .category-body-container { 
-            height: 90px; 
+            height: 15vh; 
             padding: 0 25px; 
             display: flex; 
             flex-direction: column; 
@@ -47,13 +47,13 @@
             h2 { 
                 font-weight: bold; 
                 margin: 0 6px 0; 
-                font-size: 22px; 
+                font-size: 4rem; 
                 color: #4a4a4a; 
             } 
             p 
             { 
                 font-weight: lighter; 
-                font-size: 16px; 
+                font-size: 2rem; 
             } 
         } 
     }
