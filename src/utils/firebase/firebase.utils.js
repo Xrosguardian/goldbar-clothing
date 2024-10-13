@@ -2,9 +2,10 @@
 import { initializeApp } from "firebase/app";
 import { 
     getAuth,
-    signInWithRedirect,
+    // signInWithRedirect,
     signInWithPopup,
-    GoogleAuthProvider
+    GoogleAuthProvider,
+    createUserWithEmailAndPassword,
  } from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -31,17 +32,19 @@ const firebaseConfig = {
 // Initialize Firebase
 const firebaseapp = initializeApp(firebaseConfig);
 
-const provider = new GoogleAuthProvider();
-provider.setCustomParameters({
+const googleprovider = new GoogleAuthProvider();
+googleprovider.setCustomParameters({
     prompt : "select_account"
 })
-
+//we can make diferent signin method just import them make a provider and export them
 export const auth = getAuth();
-export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
+export const signInWithGooglePopup = () => signInWithPopup(auth, googleprovider);
+// export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googleprovider);
 
 const db = getFirestore();
 
-export const createUserDocumentFromAuth = async (userAuth) => {
+export const createUserDocumentFromAuth = async (userAuth, additionalInformation) => {
+    if(!userAuth) return;
     const userDocRef = doc(db, 'users', userAuth.uid);
 
     //console.log(userDocRef)
@@ -49,7 +52,7 @@ export const createUserDocumentFromAuth = async (userAuth) => {
     const userSnapshot = await getDoc(userDocRef);
     //console.log(userSnapshot);
     //console.log(userSnapshot.exists());
-    
+
     //pseudo code:
     //if user data exits
     //reutn back userDocRef
@@ -64,7 +67,8 @@ export const createUserDocumentFromAuth = async (userAuth) => {
             await setDoc(userDocRef, {
                 displayName,
                 email,
-                createdAt
+                createdAt,
+                ...additionalInformation
             });
         } catch (error){
             console.log('error creating the user', error.message)
@@ -73,4 +77,9 @@ export const createUserDocumentFromAuth = async (userAuth) => {
 
     return userDocRef;
 
+}
+
+export const createAuthUserWithEmailAndPassword = async(email,password) => {
+    if(!email||!password) return;
+    createAuthUserWithEmailAndPassword(auth, email, password);
 }
